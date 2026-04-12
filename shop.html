@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程与吉祥物 | 易马国学院</title>
+<meta name="description" content="易马国学院官方课程与风水吉祥物销售，涵盖易经、风水、奇门遁甲等系统课程，以及招财貔貅、开光罗盘等正宗法器。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080f0d;
+  --bg-card: #0d1a14;
+  --paper: #f0ece0;
+  --jade: #4a9e7d;
+  --jade-light: #6bc4a0;
+  --jade-dark: #2d6b52;
+  --jade-gold: #c9a84c;
+  --text: #a8bdb0;
+  --text-muted: #5a7065;
+  --border: rgba(74,158,125,0.2);
+  --glow: rgba(74,158,125,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden; line-height: 1.8;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--jade-dark); border-radius: 3px; }
+
+#bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 60px; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(8,15,13,0.93); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-logo-icon {
+  width: 40px; height: 40px; border: 2px solid var(--jade); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Ma Shan Zheng', cursive; font-size: 20px; color: var(--jade);
+}
+.nav-logo-text { font-family: 'ZCOOL XiaoWei', serif; font-size: 22px; color: var(--jade-light); letter-spacing: 4px; }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: var(--text); text-decoration: none; font-size: 13px;
+  letter-spacing: 2px; transition: color 0.3s; position: relative;
+}
+.nav-links a:hover { color: var(--jade-light); }
+.nav-links a.active { color: var(--jade-light); }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 1px; background: var(--jade-light);
+}
+.nav-cta {
+  background: var(--jade); color: #fff; padding: 8px 20px;
+  font-size: 13px; letter-spacing: 2px; text-decoration: none;
+  border-radius: 2px; transition: all 0.3s;
+}
+.nav-cta:hover { background: var(--jade-light); }
+
+/* BREADCRUMB */
+.breadcrumb-bar { position: relative; z-index: 1; padding: 110px 60px 20px; max-width: 1200px; margin: 0 auto; }
+.breadcrumb { font-size: 13px; color: var(--text-muted); letter-spacing: 1px; }
+.breadcrumb a { color: var(--text-muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--jade-light); }
+.breadcrumb span { margin: 0 8px; }
+
+/* HERO */
+.shop-hero { position: relative; z-index: 1; text-align: center; padding: 20px 60px 70px; max-width: 1200px; margin: 0 auto; }
+.shop-hero-eyebrow { font-family: 'Ma Shan Zheng', cursive; font-size: 16px; color: var(--jade-light); letter-spacing: 4px; margin-bottom: 16px; }
+.shop-hero h1 { font-family: 'ZCOOL XiaoWei', serif; font-size: clamp(32px,5vw,56px); color: var(--paper); letter-spacing: 8px; margin-bottom: 16px; }
+.shop-hero-divider { width: 80px; height: 1px; background: var(--jade); margin: 0 auto 30px; }
+.shop-hero-sub { font-size: 15px; color: var(--text-muted); letter-spacing: 3px; line-height: 2; }
+
+/* TABS */
+.tab-nav { position: relative; z-index: 1; display: flex; justify-content: center; max-width: 700px; margin: 0 auto 60px; border: 1px solid var(--border); }
+.tab-btn {
+  flex: 1; padding: 18px 30px; background: transparent; border: none;
+  color: var(--text-muted); font-family: 'Noto Serif SC', serif;
+  font-size: 15px; letter-spacing: 4px; cursor: pointer; transition: all 0.3s;
+}
+.tab-btn.active { background: var(--jade); color: #fff; font-weight: 600; }
+.tab-btn:not(.active):hover { background: rgba(74,158,125,0.1); color: var(--jade-light); }
+
+/* SECTIONS */
+.section { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px 60px 100px; }
+.section-title { text-align: center; margin-bottom: 60px; }
+.section-title h2 { font-family: 'ZCOOL XiaoWei', serif; font-size: 36px; color: var(--paper); letter-spacing: 6px; margin-bottom: 14px; }
+.section-title-divider { width: 60px; height: 1px; background: var(--jade); margin: 0 auto 14px; }
+.section-title p { font-size: 14px; color: var(--text-muted); letter-spacing: 3px; }
+
+/* COURSE GRID */
+.course-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 30px; }
+.course-card { background: var(--bg-card); border: 1px solid var(--border); padding: 40px 30px; transition: all 0.4s; }
+.course-card:hover { border-color: var(--jade); box-shadow: 0 0 40px var(--glow); transform: translateY(-4px); }
+.course-card-tag { display: inline-block; background: rgba(74,158,125,0.12); border: 1px solid var(--jade-dark); color: var(--jade-light); font-size: 11px; letter-spacing: 3px; padding: 4px 12px; margin-bottom: 20px; }
+.course-card h3 { font-family: 'ZCOOL XiaoWei', serif; font-size: 24px; color: var(--paper); letter-spacing: 3px; margin-bottom: 12px; }
+.course-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.9; margin-bottom: 24px; letter-spacing: 1px; }
+.course-card-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.course-card-price { font-family: 'ZCOOL XiaoWei', serif; font-size: 28px; color: var(--jade-light); letter-spacing: 2px; }
+.course-card-price small { font-size: 14px; color: var(--text-muted); margin-left: 4px; }
+.course-card-period { font-size: 13px; color: var(--text-muted); letter-spacing: 1px; }
+.course-card-highlight { position: absolute; top: 20px; right: 20px; background: var(--jade); color: #fff; font-size: 11px; letter-spacing: 2px; padding: 3px 10px; }
+.course-btn { display: block; text-align: center; background: transparent; border: 1px solid var(--jade); color: var(--jade-light); font-family: 'Noto Serif SC', serif; font-size: 13px; letter-spacing: 3px; padding: 12px; text-decoration: none; transition: all 0.3s; cursor: pointer; }
+.course-btn:hover { background: var(--jade); color: #fff; }
+
+/* PRODUCT GRID */
+.product-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 30px; }
+.product-card { background: var(--bg-card); border: 1px solid var(--border); overflow: hidden; transition: all 0.4s; }
+.product-card:hover { border-color: var(--jade); box-shadow: 0 0 30px var(--glow); transform: translateY(-4px); }
+.product-card-img { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#0d1a14,#080f0d); }
+.product-card-img-inner { font-size: 60px; }
+.product-card-body { padding: 24px; }
+.product-card h3 { font-family: 'ZCOOL XiaoWei', serif; font-size: 20px; color: var(--paper); letter-spacing: 3px; margin-bottom: 8px; }
+.product-card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; }
+.product-card-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border); }
+.product-price { font-family: 'ZCOOL XiaoWei', serif; font-size: 24px; color: var(--jade-light); letter-spacing: 1px; }
+.product-price small { font-size: 12px; color: var(--text-muted); }
+.product-tag { font-size: 11px; color: var(--text-muted); background: rgba(74,158,125,0.1); border: 1px solid var(--border); padding: 2px 8px; letter-spacing: 1px; }
+
+/* CTA */
+.cta-section { position: relative; z-index: 1; text-align: center; max-width: 700px; margin: 0 auto 80px; padding: 60px 40px; border: 1px solid var(--border); background: rgba(74,158,125,0.03); }
+.cta-section h3 { font-family: 'ZCOOL XiaoWei', serif; font-size: 30px; color: var(--paper); letter-spacing: 4px; margin-bottom: 16px; }
+.cta-section p { font-size: 14px; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 36px; line-height: 2; }
+.cta-phone { display: inline-flex; align-items: center; gap: 14px; background: var(--jade); color: #fff; font-family: 'ZCOOL XiaoWei', serif; font-size: 26px; letter-spacing: 4px; padding: 18px 50px; text-decoration: none; transition: all 0.3s; }
+.cta-phone:hover { background: var(--jade-light); transform: scale(1.03); }
+.cta-phone span { font-size: 14px; font-family: 'Noto Serif SC', serif; letter-spacing: 2px; }
+.cta-wechat { margin-top: 16px; font-size: 13px; color: var(--text-muted); letter-spacing: 2px; }
+
+/* FOOTER */
+.footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 40px 60px; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
+.footer-brand-name { font-family: 'ZCOOL XiaoWei', serif; font-size: 20px; color: var(--jade-light); letter-spacing: 4px; margin-bottom: 12px; }
+.footer-brand-desc { font-size: 13px; color: var(--text-muted); line-height: 1.8; max-width: 400px; letter-spacing: 1px; }
+.footer-bottom { text-align: center; padding: 20px 60px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted); letter-spacing: 2px; }
+.footer-info { font-size: 13px; color: var(--text-muted); line-height: 2; letter-spacing: 1px; margin-top: 12px; }
+.footer-info strong { color: var(--jade-light); }
+
+@media (max-width: 768px) {
+  .nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .shop-hero, .section { padding-left: 20px; padding-right: 20px; }
+  .course-grid, .product-grid { grid-template-columns: 1fr; }
+  .footer { padding: 30px 20px; flex-direction: column; }
+  .cta-phone { font-size: 20px; padding: 16px 30px; }
+  .breadcrumb-bar { padding: 100px 20px 20px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">易</div>
+    <div class="nav-logo-text">易马国学院</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">师资介绍</a></li>
+    <li><a href="index.html#services">服务项目</a></li>
+    <li><a href="index.html#courses">课程体系</a></li>
+    <li><a href="index.html#philosophy">理念传承</a></li>
+    <li><a href="shop.html" class="active">课程与吉祥物</a></li>
+  </ul>
+  <a href="tel:15640416234" class="nav-cta">📞 咨询</a>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="index.html">首页</a>
+    <span>/</span>
+    <span>课程与吉祥物</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="shop-hero">
+  <div class="shop-hero-eyebrow">传承正统 · 正品法器</div>
+  <h1>课程与吉祥物</h1>
+  <div class="shop-hero-divider"></div>
+  <p class="shop-hero-sub">
+    系统化课程，循序渐进，从入门到精通<br>
+    正宗开光法器，辅助调理，趋吉避凶
+  </p>
+</div>
+
+<!-- TABS -->
+<div class="tab-nav" style="position:relative;z-index:1;max-width:700px;margin:0 auto 0;">
+  <button class="tab-btn active" onclick="showTab('courses')">📖 课程</button>
+  <button class="tab-btn" onclick="showTab('products')">🏺 吉祥物</button>
+</div>
+
+<!-- COURSES -->
+<div id="tab-courses" class="section" style="padding-top:0;">
+  <div class="section-title">
+    <div class="section-title-divider"></div>
+    <h2>系统课程</h2>
+    <p>循序渐进，从易经入门到精通调理</p>
+  </div>
+
+  <div class="course-grid">
+    <div class="course-card">
+      <div class="course-card-tag">入门级</div>
+      <div class="course-card-highlight">热门</div>
+      <h3>易经基础班</h3>
+      <p class="course-card-desc">从零开始，系统学习易经基础理论。掌握八卦象意、六爻基础，了解五行生克与天干地支，建立完整的易学思维框架。</p>
+      <div class="course-card-info">
+        <div class="course-card-price">¥880<small>/人</small></div>
+        <div class="course-card-period">学制 1 个月</div>
+      </div>
+      <a href="tel:15640416234" class="course-btn">立即报名</a>
+    </div>
+
+    <div class="course-card">
+      <div class="course-card-tag">实操级</div>
+      <h3>风水实操班</h3>
+      <p class="course-card-desc">理论结合实战，深入学习阳宅阴宅风水堪舆。掌握龙穴砂水向五大要素，学会实地看盘与调理方案制定。</p>
+      <div class="course-card-info">
+        <div class="course-card-price">¥1680<small>/人</small></div>
+        <div class="course-card-period">学制 2 个月</div>
+      </div>
+      <a href="tel:15640416234" class="course-btn">立即报名</a>
+    </div>
+
+    <div class="course-card">
+      <div class="course-card-tag">高阶级</div>
+      <div class="course-card-highlight">推荐</div>
+      <h3>奇门遁甲班</h3>
+      <p class="course-card-desc">高级实战课程，系统掌握奇门遁甲预测体系。学习九宫飞星、值符值使、三奇六仪，可独立进行人生重大决策预测。</p>
+      <div class="course-card-info">
+        <div class="course-card-price">¥2280<small>/人</small></div>
+        <div class="course-card-period">学制 3 个月</div>
+      </div>
+      <a href="tel:15640416234" class="course-btn">立即报名</a>
+    </div>
+
+    <div class="course-card">
+      <div class="course-card-tag">弟子班</div>
+      <div class="course-card-highlight">稀缺</div>
+      <h3>高级弟子班</h3>
+      <p class="course-card-desc">易辰老师亲授，系统学习易经、风水、奇门、祝由四大体系。一对一辅导，终身弟子群资格，成为国学传承人。</p>
+      <div class="course-card-info">
+        <div class="course-card-price">¥5880<small>/人</small></div>
+        <div class="course-card-period">学制 6 个月</div>
+      </div>
+      <a href="tel:15640416234" class="course-btn">立即报名</a>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div id="tab-products" class="section" style="padding-top:0;display:none;">
+  <div class="section-title">
+    <div class="section-title-divider"></div>
+    <h2>正宗吉祥物</h2>
+    <p>开光加持，辅助调理，护佑平安</p>
+  </div>
+
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-card-img"><div class="product-card-img-inner">🐉</div></div>
+      <div class="product-card-body">
+        <h3>开光招财貔貅</h3>
+        <p class="product-card-desc">正宗开光貔貅，只进不出，吸纳四方财气。适用于商业场所、住宅客厅，配使用方法说明。</p>
+        <div class="product-card-bottom">
+          <div class="product-price">¥298<small>/个</small></div>
+          <div class="product-tag">开光加持</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-card-img"><div class="product-card-img-inner">🧭</div></div>
+      <div class="product-card-body">
+        <h3>正宗开光罗盘</h3>
+        <p class="product-card-desc">专业地理罗盘，用于风水堪舆测量。正宗杨公针法，用于阳宅阴宅选址定向，必备工具。</p>
+        <div class="product-card-bottom">
+          <div class="product-price">¥680<small>/个</small></div>
+          <div class="product-tag">专业法器</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-card-img"><div class="product-card-img-inner">🪞</div></div>
+      <div class="product-card-body">
+        <h3>化煞八卦镜</h3>
+        <p class="product-card-desc">化解路冲、尖角煞、门对门等风水煞气。正宗铜制八卦镜，正面化煞，背面镇宅。</p>
+        <div class="product-card-bottom">
+          <div class="product-price">¥198<small>/面</small></div>
+          <div class="product-tag">化煞专用</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-card-img"><div class="product-card-img-inner">💎</div></div>
+      <div class="product-card-body">
+        <h3>五行化煞水晶阵</h3>
+        <p class="product-card-desc">根据五行相生原理配置水晶组合，化解室内阴气重、财运受阻、事业不顺等问题。量身推荐。</p>
+        <div class="product-card-bottom">
+          <div class="product-price">¥458<small>/套</small></div>
+          <div class="product-tag">五行调理</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-card-img"><div class="product-card-img-inner">🏠</div></div>
+      <div class="product-card-body">
+        <h3>文昌塔摆件</h3>
+        <p class="product-card-desc">提升学业运势、事业运势的经典风水摆件。适用于书房、办公室、学生房间，提升专注力。</p>
+        <div class="product-card-bottom">
+          <div class="product-price">¥358<small>/尊</small></div>
+          <div class="product-tag">助学业事业</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-card-img"><div class="product-card-img-inner">🔮</div></div>
+      <div class="product-card-body">
+        <h3>镇宅龙龟</h3>
+        <p class="product-card-desc">龙龟为四大瑞兽之一，可化解太岁、官非口舌，镇宅化煞。置于玄关或客厅，龙头朝门。</p>
+        <div class="product-card-bottom">
+          <div class="product-price">¥520<small>/尊</small></div>
+          <div class="product-tag">镇宅化煞</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section" style="padding-top:0;">
+  <div class="cta-section">
+    <h3>有意向，直接致电老师</h3>
+    <p>课程详情、法器选购，请直接拨打易辰老师电话<br>老师每日 9:00 - 21:00 亲自接听，有缘即来</p>
+    <a href="tel:15640416234" class="cta-phone">
+      <span>致电咨询</span>
+      📞 156 4041 6234
+    </a>
+    <div class="cta-wechat">微信搜索 <strong style="color:var(--jade-light);">15640416234</strong> 添加好友</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div>
+    <div class="footer-brand-name">易马国学院</div>
+    <p class="footer-brand-desc">以易为本，传承千年国学智慧；以马为名，助力天下有缘之人。专注易经教学与人生调理。</p>
+    <p class="footer-info">
+      <strong>地址：</strong>北京市朝阳区将台乡驼房营路8号新华科技大厦813室<br>
+      <strong>电话：</strong>156 4041 6234（微信同号）
+    </p>
+  </div>
+  <div>
+    <div class="footer-brand-name" style="font-size:16px;margin-bottom:12px;">快捷导航</div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--text-muted);">
+      <a href="index.html" style="color:var(--text-muted);text-decoration:none;letter-spacing:1px;">← 返回首页</a>
+      <a href="index.html#services" style="color:var(--text-muted);text-decoration:none;letter-spacing:1px;">服务项目</a>
+      <a href="index.html#courses" style="color:var(--text-muted);text-decoration:none;letter-spacing:1px;">课程体系</a>
+      <a href="index.html#contact" style="color:var(--text-muted);text-decoration:none;letter-spacing:1px;">预约咨询</a>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  © 2024-2026 易马国学院 · 孙资恬老师 & 易辰老师 版权所有
+</div>
+
+<script>
+// Particle background
+(function(){
+  var canvas=document.getElementById('bg-canvas'), ctx=canvas.getContext('2d');
+  var particles=[];
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize(); window.addEventListener('resize',resize);
+  for(var i=0;i<60;i++){
+    particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+      r:Math.random()*1.5+0.3,speed:Math.random()*0.3+0.1,
+      opacity:Math.random()*0.4+0.1,drift:Math.random()*0.4-0.2});
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(function(p){
+      p.y-=p.speed; p.x+=p.drift;
+      if(p.y<-10){p.y=canvas.height+10;p.x=Math.random()*canvas.width;}
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(74,158,125,'+p.opacity+')';
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// Tab switching
+function showTab(tab) {
+  var courses = document.getElementById('tab-courses');
+  var products = document.getElementById('tab-products');
+  var btns = document.querySelectorAll('.tab-btn');
+  if (tab === 'courses') {
+    courses.style.display = 'block'; products.style.display = 'none';
+    btns[0].classList.add('active'); btns[1].classList.remove('active');
+  } else {
+    courses.style.display = 'none'; products.style.display = 'block';
+    btns[0].classList.remove('active'); btns[1].classList.add('active');
+  }
+}
+
+// Scroll reveal
+(function(){
+  var els = document.querySelectorAll('.course-card,.product-card,.section-title');
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }
+    });
+  }, {threshold:0.1});
+  els.forEach(function(el){
+    el.style.opacity='0'; el.style.transform='translateY(20px)';
+    el.style.transition='opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+})();
+</script>
+</body>
+</html>

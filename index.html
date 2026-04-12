@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易辰国学院 | 国学智慧 · 顺天应人</title>
+<meta name="description" content="易辰国学院由易辰老师主讲，传承国学易经智慧，提供祝由术调理、阴宅阳宅风水、子嗣调理、选号码、调官调财等专业服务。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #080f0d;
+  --ink-light: #0f1916;
+  --paper: #e8f0ec;
+  --paper-warm: #d8e8e0;
+  --jade: #4aab8a;
+  --jade-light: #6fc4a8;
+  --jade-dark: #2d7a62;
+  --seal: #1a4a3a;
+  --text-light: #a8c8b8;
+  --text-muted: #6a8a7a;
+  --border: rgba(74,171,138,0.2);
+  --glow: rgba(74,171,138,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Serif SC', 'PingFang SC', serif;
+  background: var(--ink);
+  color: var(--text-light);
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--jade-dark); border-radius: 3px; }
+
+#bg-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 18px 60px; display: flex; justify-content: space-between; align-items: center;
+  transition: all 0.4s ease; background: transparent;
+}
+.nav.scrolled {
+  background: rgba(8,15,13,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); padding: 12px 60px;
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-logo-icon {
+  width: 42px; height: 42px; border: 2px solid var(--jade); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Ma Shan Zheng', cursive; font-size: 20px; color: var(--jade);
+  position: relative; overflow: hidden;
+}
+.nav-logo-icon::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--jade) 0%, transparent 60%); opacity: 0.15;
+}
+.nav-logo-text { font-family: 'ZCOOL XiaoWei', serif; font-size: 22px; color: var(--jade); letter-spacing: 4px; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a { color: var(--text-light); text-decoration: none; font-size: 14px; letter-spacing: 2px; transition: color 0.3s; position: relative; }
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px;
+  background: var(--jade); transform: scaleX(0); transition: transform 0.3s;
+}
+.nav-links a:hover { color: var(--jade); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  padding: 8px 22px; border: 1px solid var(--jade); color: var(--jade) !important;
+  border-radius: 2px; letter-spacing: 3px; font-size: 13px !important; transition: all 0.3s !important;
+}
+.nav-cta:hover { background: var(--jade) !important; color: var(--ink) !important; }
+.nav-cta::after { display: none !important; }
+.mobile-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+.mobile-toggle span { width: 24px; height: 1.5px; background: var(--jade); transition: all 0.3s; }
+
+/* HERO */
+.hero { position: relative; height: 100vh; min-height: 700px; display: flex; align-items: center; justify-content: center; text-align: center; z-index: 1; overflow: hidden; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 60%, rgba(74,171,138,0.08) 0%, transparent 60%), linear-gradient(to bottom, transparent 50%, var(--ink) 100%);
+  z-index: 2;
+}
+.hero-content { position: relative; z-index: 3; max-width: 900px; padding: 0 40px; }
+.hero-eyebrow { font-size: 13px; letter-spacing: 8px; color: var(--jade); text-transform: uppercase; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.3s; }
+.hero-title { font-family: 'ZCOOL XiaoWei', 'Ma Shan Zheng', serif; font-size: clamp(52px, 8vw, 96px); color: var(--paper); line-height: 1.1; margin-bottom: 10px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.5s; text-shadow: 0 0 60px rgba(74,171,138,0.2); }
+.hero-subtitle { font-size: clamp(16px, 2.5vw, 22px); color: var(--text-muted); font-weight: 300; letter-spacing: 4px; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s; }
+.hero-iChing { font-size: 28px; color: var(--jade); letter-spacing: 12px; margin-bottom: 50px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.9s; }
+.hero-iChing small { font-size: 14px; color: var(--text-muted); letter-spacing: 4px; display: block; margin-top: 6px; }
+.hero-actions { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s ease forwards 1.1s; }
+.btn-primary {
+  padding: 14px 40px; background: linear-gradient(135deg, var(--jade-dark), var(--jade)); color: var(--ink);
+  text-decoration: none; font-size: 14px; letter-spacing: 4px; border: none; cursor: pointer; transition: all 0.3s; font-family: inherit;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(74,171,138,0.3); }
+.btn-outline {
+  padding: 14px 40px; background: transparent; color: var(--jade); border: 1px solid var(--jade);
+  text-decoration: none; font-size: 14px; letter-spacing: 4px; cursor: pointer; transition: all 0.3s; font-family: inherit;
+}
+.btn-outline:hover { background: rgba(74,171,138,0.1); transform: translateY(-2px); }
+.hero-scroll { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text-muted); font-size: 11px; letter-spacing: 3px; animation: scrollBounce 2s ease-in-out infinite; }
+.hero-scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--jade), transparent); }
+@keyframes scrollBounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SECTIONS */
+.section { position: relative; z-index: 1; padding: 120px 60px; }
+.section-label { font-size: 11px; letter-spacing: 6px; color: var(--jade); text-transform: uppercase; text-align: center; margin-bottom: 12px; }
+.section-title { font-family: 'ZCOOL XiaoWei', serif; font-size: clamp(32px, 4vw, 52px); color: var(--paper); text-align: center; margin-bottom: 12px; }
+.section-desc { font-size: 15px; color: var(--text-muted); text-align: center; max-width: 600px; margin: 0 auto 70px; font-weight: 300; line-height: 1.9; }
+.divider { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--jade), transparent); margin: 0 auto 60px; }
+
+/* ABOUT */
+.about { background: var(--ink-light); }
+.about-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; max-width: 1100px; margin: 0 auto; align-items: center; }
+.about-image-wrap { position: relative; aspect-ratio: 3/4; overflow: hidden; border: 1px solid var(--border); }
+.about-image-wrap::before { display: none; }
+.about-image-glow { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, rgba(74,171,138,0.15), transparent 70%); }
+.about-accent-line { position: absolute; inset: -1px; border: 1px solid var(--border); pointer-events: none; }
+.about-accent-line::before, .about-accent-line::after { content: ''; position: absolute; background: var(--jade); }
+.about-accent-line::before { top: 20px; left: 20px; width: 30px; height: 1px; }
+.about-accent-line::after { bottom: 20px; right: 20px; width: 30px; height: 1px; }
+.about-name-cn { font-family: 'Ma Shan Zheng', cursive; font-size: 56px; color: var(--jade); line-height: 1; margin-bottom: 6px; }
+.about-title { font-size: 14px; color: var(--text-muted); letter-spacing: 4px; margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid var(--border); }
+.about-bio { font-size: 15px; color: var(--text-light); line-height: 2; margin-bottom: 30px; font-weight: 300; }
+.about-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+.about-tag { padding: 5px 16px; border: 1px solid var(--border); font-size: 12px; color: var(--jade); letter-spacing: 2px; border-radius: 2px; }
+.about-quote { padding: 24px 28px; border-left: 3px solid var(--jade); background: rgba(74,171,138,0.05); font-size: 15px; color: var(--text-light); font-style: italic; line-height: 1.9; }
+
+/* SERVICES */
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
+.service-card { padding: 50px 36px; border: 1px solid var(--border); background: rgba(15,25,22,0.5); transition: all 0.4s ease; position: relative; overflow: hidden; cursor: default; }
+.service-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(to right, var(--jade), transparent); opacity: 0; transition: opacity 0.4s; }
+.service-card:hover { border-color: rgba(74,171,138,0.4); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+.service-card:hover::before { opacity: 1; }
+.service-icon { font-size: 40px; margin-bottom: 24px; display: block; filter: drop-shadow(0 0 10px rgba(74,171,138,0.3)); }
+.service-number { font-family: 'Noto Serif SC', serif; font-size: 48px; color: rgba(74,171,138,0.1); position: absolute; top: 20px; right: 24px; font-weight: 700; line-height: 1; }
+.service-title { font-family: 'ZCOOL XiaoWei', serif; font-size: 24px; color: var(--paper); margin-bottom: 14px; letter-spacing: 2px; }
+.service-desc { font-size: 14px; color: var(--text-muted); line-height: 1.9; font-weight: 300; margin-bottom: 24px; }
+.service-detail { font-size: 13px; color: var(--jade); letter-spacing: 2px; display: flex; align-items: center; gap: 6px; opacity: 0; transform: translateX(-10px); transition: all 0.3s; }
+.service-card:hover .service-detail { opacity: 1; transform: translateX(0); }
+.service-detail::before { content: '▶'; font-size: 8px; }
+
+/* BAGUA */
+.bagua-section { background: var(--ink-light); text-align: center; }
+.bagua-diagram { width: 260px; height: 260px; margin: 0 auto 60px; position: relative; animation: rotateSlow 60s linear infinite; }
+.bagua-diagram-inner { position: absolute; inset: 30px; display: flex; align-items: center; justify-content: center; font-family: 'Ma Shan Zheng', cursive; font-size: 80px; color: var(--jade); animation: rotateSlow 60s linear infinite reverse; }
+@keyframes rotateSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.bagua-words { display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; max-width: 900px; margin: 0 auto; }
+.bagua-word { padding: 18px 8px; border: 1px solid var(--border); font-family: 'Ma Shan Zheng', cursive; font-size: 28px; color: var(--jade); transition: all 0.3s; cursor: default; }
+.bagua-word:hover { background: rgba(74,171,138,0.1); border-color: var(--jade); transform: translateY(-3px); }
+.bagua-meaning { font-size: 13px; color: var(--text-muted); margin-top: 5px; letter-spacing: 1px; }
+
+/* COURSES */
+.courses-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
+.course-card { border: 1px solid var(--border); overflow: hidden; background: rgba(15,25,22,0.5); transition: all 0.4s; }
+.course-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-color: rgba(74,171,138,0.3); }
+.course-image { height: 180px; background: linear-gradient(135deg, #0f1916, #1a2f28); display: flex; align-items: center; justify-content: center; font-size: 60px; position: relative; overflow: hidden; }
+.course-image::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(74,171,138,0.1), transparent 70%); }
+.course-body { padding: 30px; }
+.course-tag { font-size: 11px; color: var(--jade); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+.course-title { font-family: 'ZCOOL XiaoWei', serif; font-size: 22px; color: var(--paper); margin-bottom: 12px; }
+.course-desc { font-size: 14px; color: var(--text-muted); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
+.course-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid var(--border); }
+.course-price { font-size: 20px; color: var(--jade); font-family: 'Noto Serif SC', serif; }
+.course-link { font-size: 13px; color: var(--text-muted); text-decoration: none; letter-spacing: 2px; transition: color 0.3s; display: flex; align-items: center; gap: 6px; }
+.course-link:hover { color: var(--jade); }
+
+/* PHILOSOPHY */
+.philosophy { background: var(--ink-light); }
+.philosophy-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; max-width: 1100px; margin: 0 auto; }
+.philosophy-item { text-align: center; padding: 40px 20px; border: 1px solid var(--border); transition: all 0.3s; }
+.philosophy-item:hover { border-color: rgba(74,171,138,0.3); background: rgba(74,171,138,0.03); }
+.philosophy-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+.philosophy-num { font-size: 11px; color: var(--jade); letter-spacing: 4px; margin-bottom: 14px; }
+.philosophy-title { font-family: 'ZCOOL XiaoWei', serif; font-size: 22px; color: var(--paper); margin-bottom: 12px; }
+.philosophy-desc { font-size: 14px; color: var(--text-muted); line-height: 1.8; font-weight: 300; }
+
+/* TESTIMONIALS */
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
+.testimonial-card { padding: 36px; border: 1px solid var(--border); background: rgba(15,25,22,0.5); position: relative; }
+.testimonial-card::before { content: '"'; position: absolute; top: 20px; left: 24px; font-size: 60px; color: rgba(74,171,138,0.15); font-family: 'Noto Serif SC', serif; line-height: 1; }
+.testimonial-text { font-size: 15px; color: var(--text-light); line-height: 1.9; margin-bottom: 24px; font-style: italic; font-weight: 300; position: relative; z-index: 1; }
+.testimonial-author { display: flex; align-items: center; gap: 14px; padding-top: 20px; border-top: 1px solid var(--border); }
+.testimonial-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--jade-dark), var(--jade)); display: flex; align-items: center; justify-content: center; font-family: 'Ma Shan Zheng', cursive; font-size: 18px; color: var(--ink); }
+.testimonial-name { font-size: 14px; color: var(--paper); letter-spacing: 1px; }
+.testimonial-role { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+
+/* CONTACT */
+.contact { background: var(--ink-light); }
+.contact-wrapper { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+.contact-info h3 { font-family: 'ZCOOL XiaoWei', serif; font-size: 28px; color: var(--paper); margin-bottom: 20px; }
+.contact-info p { font-size: 15px; color: var(--text-muted); line-height: 1.9; margin-bottom: 30px; font-weight: 300; }
+.contact-items { display: flex; flex-direction: column; gap: 20px; }
+.contact-item { display: flex; align-items: flex-start; gap: 16px; }
+.contact-item-icon { width: 40px; height: 40px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.contact-item-label { font-size: 12px; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 2px; }
+.contact-item-value { font-size: 15px; color: var(--paper); }
+
+/* FOOTER */
+.footer { position: relative; z-index: 1; padding: 60px 60px 40px; border-top: 1px solid var(--border); }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 60px; margin-bottom: 50px; }
+.footer-brand-name { font-family: 'ZCOOL XiaoWei', serif; font-size: 24px; color: var(--jade); margin-bottom: 16px; letter-spacing: 4px; }
+.footer-brand-desc { font-size: 14px; color: var(--text-muted); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
+.footer-social { display: flex; gap: 12px; }
+.footer-social-link { width: 38px; height: 38px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; transition: all 0.3s; color: var(--text-muted); }
+.footer-social-link:hover { border-color: var(--jade); color: var(--jade); }
+.footer-col-title { font-size: 13px; color: var(--jade); letter-spacing: 4px; margin-bottom: 24px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.3s; letter-spacing: 1px; }
+.footer-links a:hover { color: var(--jade); }
+.footer-bottom { max-width: 1100px; margin: 0 auto; padding-top: 30px; border-top: 1px solid rgba(74,171,138,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+.footer-bottom a { color: var(--text-muted); text-decoration: none; }
+.footer-bottom a:hover { color: var(--jade); }
+
+/* BACK TO TOP */
+.back-to-top { position: fixed; bottom: 30px; right: 30px; width: 44px; height: 44px; border: 1px solid var(--jade); background: rgba(8,15,13,0.9); color: var(--jade); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 99; transition: all 0.3s; opacity: 0; pointer-events: none; font-size: 18px; }
+.back-to-top.visible { opacity: 1; pointer-events: all; }
+.back-to-top:hover { background: var(--jade); color: var(--ink); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .section { padding: 80px 40px; }
+  .nav { padding: 18px 30px; }
+  .nav.scrolled { padding: 12px 30px; }
+  .services-grid, .courses-grid, .philosophy-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-image-wrap { max-width: 400px; margin: 0 auto; }
+}
+@media (max-width: 768px) {
+  .section { padding: 70px 24px; }
+  .nav-links { display: none; }
+  .nav-links.open { display: flex; flex-direction: column; position: fixed; inset: 0; background: rgba(8,15,13,0.98); justify-content: center; align-items: center; gap: 30px; z-index: 101; }
+  .nav-links.open a { font-size: 18px; }
+  .mobile-toggle { display: flex; z-index: 102; }
+  .mobile-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+  .mobile-toggle.open span:nth-child(2) { opacity: 0; }
+  .mobile-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+  .services-grid, .courses-grid, .philosophy-grid, .testimonials-grid, .contact-wrapper { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+  .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+  .bagua-words { grid-template-columns: repeat(4, 1fr); }
+  .hero-title { font-size: 48px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<nav class="nav" id="mainNav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">辰</div>
+    <div class="nav-logo-text">易辰国学院</div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">师资介绍</a></li>
+    <li><a href="#services">服务项目</a></li>
+    <li><a href="#courses">课程体系</a></li>
+    <li><a href="#philosophy">理念传承</a></li>
+    <li><a href="#testimonials">学员见证</a></li>
+    <li><a href="#contact" class="nav-cta">立即咨询</a></li>
+  </ul>
+  <button class="mobile-toggle" id="mobileToggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">传承千年易经智慧 · 顺天应人趋吉避凶</div>
+    <h1 class="hero-title">易辰国学院</h1>
+    <p class="hero-subtitle">以易为镜 · 辰耀人生</p>
+    <div class="hero-iChing">
+      地势坤，君子以厚德载物
+      <small>《周易》坤卦 · 象辞</small>
+    </div>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">预约咨询</a>
+      <a href="#services" class="btn-outline">了解服务</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    向下探索
+  </div>
+</section>
+
+<section class="section about" id="about">
+  <div class="section-label reveal">师资介绍</div>
+  <div class="section-title reveal">主讲导师</div>
+  <div class="divider reveal"></div>
+  <div class="about-grid">
+    <div class="about-image-wrap reveal" style="background:url('teacher-yichen.jpg') center/cover no-repeat;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,15,13,0.1) 0%,rgba(8,15,13,0.55) 100%);z-index:1;"></div>
+      <div class="about-image-glow"></div>
+      <div class="about-accent-line"></div>
+    </div>
+    <div class="about-content">
+      <div class="about-name-cn reveal">易辰</div>
+      <div class="about-title reveal">易辰国学院主讲老师 · 国学传承者</div>
+      <p class="about-bio reveal">
+        易辰老师自幼研习中华传统术数，精通易经象数、八字命理、风水堪舆、祝由之术。多年研习与实践，以"易道济世"为宗旨，为有缘人解读命运密码，调理人生格局。
+      </p>
+      <p class="about-bio reveal">
+        老师秉承"以易化人，以术济世"的理念，将古老易学智慧融入现代生活，为每一位求学者和求助者提供专业、真诚的指导与调理服务。
+      </p>
+      <div class="about-tags reveal">
+        <span class="about-tag">易经象数</span>
+        <span class="about-tag">八字命理</span>
+        <span class="about-tag">奇门遁甲</span>
+        <span class="about-tag">风水堪舆</span>
+        <span class="about-tag">祝由术</span>
+        <span class="about-tag">六爻纳甲</span>
+      </div>
+      <blockquote class="about-quote reveal">
+        "易者，阴阳之道也。知其变，守其常，方能在天地之间，找准自己的位置，活出生命的意义。"
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <div class="section-label reveal">服务项目</div>
+  <div class="section-title reveal">专业调理 · 全方位人生指导</div>
+  <div class="section-desc reveal">涵盖健康、运势、财富、子嗣、事业等人生重要领域，由易辰老师亲自主持调理与咨询</div>
+  <div class="divider reveal"></div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-number">01</span>
+      <span class="service-icon">🏥</span>
+      <div class="service-title">祝由术 · 调理健康</div>
+      <p class="service-desc">祝由术乃上古医道合一之术，借天地之力，调理身心失衡，扶正祛邪。对于慢性不适、亚健康、莫名不适等有独到之处。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-number">02</span>
+      <span class="service-icon">🏔️</span>
+      <div class="service-title">阴宅风水调理</div>
+      <p class="service-desc">阴宅为根，阳世为叶。祖先安葬之地风水的好坏，直接关系到后代的命运吉凶。老师凭精湛风水术，为您调理阴宅，荫及子孙。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-number">03</span>
+      <span class="service-icon">🏠</span>
+      <div class="service-title">阳宅风水调理</div>
+      <p class="service-desc">家居、公司、商铺风水，直接影响居住者和经营者的运势。老师亲赴现场勘察，综合布局，催旺贵人、财运、事业。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-number">04</span>
+      <span class="service-icon">👶</span>
+      <div class="service-title">生子调理 · 求子助孕</div>
+      <p class="service-desc">久婚未孕、求子不得，令人忧心。老师从命理与风水双维度分析原因，辅以调理布局，助有缘人如愿得子，添丁进福。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-number">05</span>
+      <span class="service-icon">📱</span>
+      <div class="service-title">手机号码选择</div>
+      <p class="service-desc">手机号码日日随身，其数字能量无时无刻不在影响使用者的运势。老师结合先天命理，精选最适合您的吉祥号码，助运一生。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-number">06</span>
+      <span class="service-icon">🏗️</span>
+      <div class="service-title">房子选址 · 宅基地堪舆</div>
+      <p class="service-desc">购地建宅，人生大事。地基之择，风水先行。老师凭数十年经验，为您的宅基地、购房选址提供专业风水评估与优化建议。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-number">07</span>
+      <span class="service-icon">💼</span>
+      <div class="service-title">调官 · 事业贵人运</div>
+      <p class="service-desc">仕途不畅、事业受阻、贵人难逢？从命理根源找到症结所在，通过调理布局，疏通贵人运，助您仕途顺遂、事业腾飞。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-number">08</span>
+      <span class="service-icon">💰</span>
+      <div class="service-title">调财 · 财富运势</div>
+      <p class="service-desc">财为养命之源，财运不畅者，十有八九命格或风水有碍。老师精准诊断财库与财路，通过调理助您财源广进、富贵自来。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-number">09</span>
+      <span class="service-icon">💬</span>
+      <div class="service-title">心理咨询 · 心灵疏导</div>
+      <p class="service-desc">人生迷茫、情绪困扰、婚姻情感、家庭矛盾……老师以易经智慧为引，倾听心声，助您理清思绪，走出困境，找回内心的平静与力量。</p>
+      <div class="service-detail">了解更多</div>
+    </div>
+  </div>
+</section>
+
+<section class="section bagua-section" id="bagua">
+  <div class="section-label reveal">易经基础</div>
+  <div class="section-title reveal">太极生两仪 · 两仪生四象</div>
+  <div class="section-desc reveal">八卦是《周易》的核心符号，象征天地万物的八种基本能量</div>
+  <div class="divider reveal"></div>
+  <div class="bagua-diagram reveal">
+    <svg viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="130" cy="130" r="120" stroke="#4aab8a" stroke-width="1" stroke-dasharray="4 4" opacity="0.3"/>
+      <circle cx="130" cy="130" r="100" stroke="#4aab8a" stroke-width="1.5" opacity="0.5"/>
+      <circle cx="130" cy="130" r="80" stroke="#4aab8a" stroke-width="1" opacity="0.3"/>
+      <g stroke="#4aab8a" stroke-width="2.5" stroke-linecap="round">
+        <line x1="30" y1="30" x2="90" y2="30"/><line x1="30" y1="60" x2="90" y2="60"/><line x1="30" y1="90" x2="90" y2="90"/>
+        <line x1="170" y1="30" x2="230" y2="30"/><line x1="170" y1="60" x2="230" y2="60"/><line x1="170" y1="85" x2="230" y2="85" opacity="0.2"/>
+        <line x1="170" y1="170" x2="230" y2="170"/><line x1="170" y1="195" x2="230" y2="195" opacity="0.2"/><line x1="170" y1="220" x2="230" y2="220"/>
+        <line x1="30" y1="170" x2="90" y2="170" opacity="0.2"/><line x1="30" y1="200" x2="90" y2="200"/><line x1="30" y1="230" x2="90" y2="230"/>
+        <line x1="30" y1="115" x2="90" y2="115"/><line x1="30" y1="145" x2="90" y2="145"/><line x1="30" y1="175" x2="90" y2="175" opacity="0.2"/>
+        <line x1="115" y1="170" x2="145" y2="170" opacity="0.2"/><line x1="115" y1="200" x2="145" y2="200"/><line x1="115" y1="230" x2="145" y2="230" opacity="0.2"/>
+        <line x1="170" y1="115" x2="230" y2="115" opacity="0.2"/><line x1="170" y1="145" x2="230" y2="145"/><line x1="170" y1="175" x2="230" y2="175"/>
+        <line x1="115" y1="30" x2="145" y2="30" opacity="0.2"/><line x1="115" y1="60" x2="145" y2="60"/><line x1="115" y1="90" x2="145" y2="90" opacity="0.2"/>
+      </g>
+      <circle cx="130" cy="130" r="12" fill="#4aab8a" opacity="0.8"/>
+    </svg>
+    <div class="bagua-diagram-inner">☰</div>
+  </div>
+  <div class="bagua-words reveal">
+    <div class="bagua-word">乾 ☰<div class="bagua-meaning">天</div></div>
+    <div class="bagua-word">坤 ☷<div class="bagua-meaning">地</div></div>
+    <div class="bagua-word">震 ☳<div class="bagua-meaning">雷</div></div>
+    <div class="bagua-word">巽 ☴<div class="bagua-meaning">风</div></div>
+    <div class="bagua-word">坎 ☵<div class="bagua-meaning">水</div></div>
+    <div class="bagua-word">离 ☲<div class="bagua-meaning">火</div></div>
+    <div class="bagua-word">艮 ☶<div class="bagua-meaning">山</div></div>
+    <div class="bagua-word">兑 ☱<div class="bagua-meaning">泽</div></div>
+  </div>
+</section>
+
+<section class="section" id="courses">
+  <div class="section-label reveal">课程体系</div>
+  <div class="section-title reveal">系统学习 · 传承国学智慧</div>
+  <div class="section-desc reveal">从入门到精通，系统化课程设计，理论结合实操，让易经智慧真正融入您的生活</div>
+  <div class="divider reveal"></div>
+  <div class="courses-grid">
+    <div class="course-card reveal">
+      <div class="course-image">📖</div>
+      <div class="course-body">
+        <div class="course-tag">入门系列</div>
+        <div class="course-title">易经基础入门班</div>
+        <p class="course-desc">从阴阳五行到八卦六爻，系统学习《周易》核心概念。无需基础，循序渐进，开启您的国学智慧之旅。</p>
+        <div class="course-meta">
+          <span class="course-price">详询定价</span>
+          <a href="#contact" class="course-link">了解详情 →</a>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-image">🧭</div>
+      <div class="course-body">
+        <div class="course-tag">进阶系列</div>
+        <div class="course-title">风水堪舆实操班</div>
+        <p class="course-desc">理论+实地勘察双轨教学，从罗盘使用到实地布局，老师手把手教学，学会独立为他人堪舆调理。</p>
+        <div class="course-meta">
+          <span class="course-price">详询定价</span>
+          <a href="#contact" class="course-link">了解详情 →</a>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-image">🎯</div>
+      <div class="course-body">
+        <div class="course-tag">高阶系列</div>
+        <div class="course-title">奇门遁甲精修班</div>
+        <p class="course-desc">奇门遁甲乃帝王之术，精通者可运筹帷幄。老师传授核心心法，结合实际案例分析，培养独立预测决策能力。</p>
+        <div class="course-meta">
+          <span class="course-price">详询定价</span>
+          <a href="#contact" class="course-link">了解详情 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section philosophy" id="philosophy">
+  <div class="section-label reveal">理念传承</div>
+  <div class="section-title reveal">以易为本 · 厚德载物</div>
+  <div class="section-desc reveal">易辰国学院秉承正统国学精神，传承千年智慧，助有缘人趋吉避凶</div>
+  <div class="divider reveal"></div>
+  <div class="philosophy-grid">
+    <div class="philosophy-item reveal">
+      <span class="philosophy-icon">☯</span>
+      <div class="philosophy-num">壹</div>
+      <div class="philosophy-title">天人合一</div>
+      <div class="philosophy-desc">顺应天道，遵循自然规律，与天地合其德，与日月合其明，与四时合其序。</div>
+    </div>
+    <div class="philosophy-item reveal">
+      <span class="philosophy-icon">☰</span>
+      <div class="philosophy-num">贰</div>
+      <div class="philosophy-title">知变守常</div>
+      <div class="philosophy-desc">易者，变也。知变化之道，守恒常之理，在变与不变中寻找人生的最佳路径。</div>
+    </div>
+    <div class="philosophy-item reveal">
+      <span class="philosophy-icon">☷</span>
+      <div class="philosophy-num">叁</div>
+      <div class="philosophy-title">以德为本</div>
+      <div class="philosophy-desc">厚德载物，德为福之源。调理之功，须以积德为本，福报自来，祸患自消。</div>
+    </div>
+    <div class="philosophy-item reveal">
+      <span class="philosophy-icon">☲</span>
+      <div class="philosophy-num">肆</div>
+      <div class="philosophy-title">济世利人</div>
+      <div class="philosophy-desc">传承易学，济世利人。每一个调理方案，都以改善当事人命运为目标导向。</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="testimonials">
+  <div class="section-label reveal">学员见证</div>
+  <div class="section-title reveal">有缘人的真实反馈</div>
+  <div class="section-desc reveal">每一份见证，都是对我们最大的肯定</div>
+  <div class="divider reveal"></div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <p class="testimonial-text">公司业绩一直上不去，请易辰老师做了风水调理后，团队氛围明显改善，订单也陆续来了。真的很感谢老师的指点！</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">周</div>
+        <div>
+          <div class="testimonial-name">周先生</div>
+          <div class="testimonial-role">企业主 · 风水调理客户</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <p class="testimonial-text">结婚多年没有孩子，压力很大。找到易辰老师后，从命理到风水做了全面分析调理，后来真的有了好消息。感恩老师！</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">陈</div>
+        <div>
+          <div class="testimonial-name">陈女士</div>
+          <div class="testimonial-role">生子调理客户</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <p class="testimonial-text">老师的课讲得非常好，把复杂的易理讲得深入浅出。上完课后，我对人生和决策有了全新的认识，身边朋友都说我的变化很大。</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">林</div>
+        <div>
+          <div class="testimonial-name">林同学</div>
+          <div class="testimonial-role">易经课程学员</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section contact" id="contact">
+  <div class="section-label reveal">联系我们</div>
+  <div class="section-title reveal">开启您的智慧人生</div>
+  <div class="section-desc reveal">有缘即来，有求必应。无论您有任何疑问或需求，都欢迎与我们联系</div>
+  <div class="divider reveal"></div>
+  <div class="contact-wrapper">
+    <div class="contact-info reveal">
+      <h3>易辰国学院</h3>
+      <p>传承国学智慧，弘扬易经文化。我们相信，每一个遇见易经的人，都能找到属于自己的光明之道。</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-item-icon">📞</div>
+          <div>
+            <div class="contact-item-label">联系电话</div>
+            <div class="contact-item-value">156 4041 6234</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">💬</div>
+          <div>
+            <div class="contact-item-label">微信（同号）</div>
+            <div class="contact-item-value">15640416234</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div>
+            <div class="contact-item-label">地址</div>
+            <div class="contact-item-value">北京市朝阳区将台乡驼房营路8号<br>新华科技大厦813室</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">⏰</div>
+          <div>
+            <div class="contact-item-label">服务时间</div>
+            <div class="contact-item-value">每日 9:00 - 21:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div style="text-align:center;padding:60px 40px;border:1px solid var(--border);background:rgba(15,25,22,0.5);">
+        <div style="font-size:48px;margin-bottom:20px;">📞</div>
+        <div style="font-family:'ZCOOL XiaoWei',serif;font-size:28px;color:var(--paper);margin-bottom:10px;letter-spacing:2px;">一键致电 · 即时咨询</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-bottom:36px;line-height:1.8;">
+          易辰老师每日 9:00 - 21:00 亲自接听<br>有缘即来，有求必应
+        </div>
+        <a href="tel:15640416234" class="btn-primary" style="font-size:18px;padding:18px 50px;letter-spacing:4px;text-decoration:none;display:inline-block;">
+          📞 156 4041 6234
+        </a>
+        <div style="margin-top:24px;font-size:13px;color:var(--text-muted);">
+          或搜索微信 <span style="color:var(--jade);letter-spacing:2px;">15640416234</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">易辰国学院</div>
+      <p class="footer-brand-desc">以易为镜，传承千年国学智慧；以辰为名，照亮天下有缘之人。易辰国学院，专注易经教学与人生调理，为您的命运之路指点迷津。</p>
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.6;">
+        📍 北京市朝阳区将台乡驼房营路8号<br>新华科技大厦813室
+      </p>
+      <div class="footer-social" style="margin-top:16px;">
+        <a href="#" class="footer-social-link" title="微信">微</a>
+        <a href="#" class="footer-social-link" title="抖音">抖</a>
+        <a href="#" class="footer-social-link" title="小红书">红</a>
+        <a href="#" class="footer-social-link" title="电报">TG</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">服务项目</div>
+      <ul class="footer-links">
+        <li><a href="#services">祝由术调理</a></li>
+        <li><a href="#services">阴宅风水</a></li>
+        <li><a href="#services">阳宅风水</a></li>
+        <li><a href="#services">生子调理</a></li>
+        <li><a href="#services">选号码</a></li>
+        <li><a href="#services">调官调财</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">课程体系</div>
+      <ul class="footer-links">
+        <li><a href="#courses">易经基础班</a></li>
+        <li><a href="#courses">风水实操班</a></li>
+        <li><a href="#courses">奇门遁甲班</a></li>
+        <li><a href="#contact">一对一咨询</a></li>
+        <li><a href="#philosophy">关于我们</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024-2026 易辰国学院 · 易辰老师 版权所有</span>
+    <span>以易为本 · 厚德载物</span>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  function createParticles() {
+    particles = [];
+    const count = Math.floor((W * H) / 14000);
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.5 + 0.3,
+        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random() * 0.4 + 0.1, dAlpha: (Math.random() - 0.5) * 0.005
+      });
+    }
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.alpha += p.dAlpha;
+      if (p.alpha < 0.05 || p.alpha > 0.5) p.dAlpha *= -1;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(74,171,138,${p.alpha})`; ctx.fill();
+    });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist < 120) {
+          ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(74,171,138,${0.05 * (1 - dist / 120)})`; ctx.lineWidth = 0.5; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', () => { resize(); createParticles(); });
+  resize(); createParticles(); draw();
+})();
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav'), btt = document.getElementById('backToTop');
+  if (window.scrollY > 80) { nav.classList.add('scrolled'); btt.classList.add('visible'); }
+  else { nav.classList.remove('scrolled'); btt.classList.remove('visible'); }
+});
+document.getElementById('mobileToggle').addEventListener('click', function() {
+  this.classList.toggle('open'); document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('mobileToggle').classList.remove('open');
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+revealEls.forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>
